@@ -42,7 +42,7 @@ def fetch_product(product_id):
     response.raise_for_status()
     response_data = response.json()
 
-    product_description, product_image_urls, offers = fetch_product_details(product_id)
+    product_description, product_image_urls, offers = _fetch_product_details(product_id)
 
     return Product(product_id=product_id,
                    category_id=response_data['categoryId'],
@@ -60,7 +60,7 @@ def fetch_products(category_id, offset=0, limit=DEFAULT_LIMIT):
     response_data = response.json()
     for item in response_data:
         product_id = item['productId']
-        product_description, product_image_urls, offers = fetch_product_details(product_id)
+        product_description, product_image_urls, offers = _fetch_product_details(product_id)
 
         product = Product(product_id=product_id,
                           category_id=item['categoryId'],
@@ -83,7 +83,7 @@ def shop_name_from_url(url):
         raise ValueError('Failed to get shop name from url')
 
 
-def fetch_product_details(product_id, offset=0, limit=DEFAULT_LIMIT):
+def _fetch_product_details(product_id, offset=0, limit=DEFAULT_LIMIT):
 
     offers = []
 
