@@ -11,7 +11,7 @@ class Category:
         self.title = title
 
 
-class CategoryList:
+class AllCategories:
 
     def __init__(self, categories):
         self.categories = categories

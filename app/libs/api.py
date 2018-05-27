@@ -1,6 +1,6 @@
 import re
 import requests
-from app.models import CategoryList, Category, Offer, Product
+from app.models import AllCategories, Category, Offer, Product
 
 DEFAULT_LIMIT = 1000
 
@@ -13,14 +13,14 @@ PRODUCT_COUNT_URL = URL + '/products/{category_id}/count'
 PRODUCT_OFFERS_URL = URL + '/offers/{product_id}/{offset}/{limit}'
 
 
-def fetch_category_list() -> CategoryList:
+def fetch_all_categories() -> AllCategories:
     categories = []
     response = requests.get(CATEGORIES_URL)
     response_data = response.json()
     for item in response_data:
         categories.append(Category(obj_id=item['categoryId'], title=item['title']))
 
-    return CategoryList(categories)
+    return AllCategories(categories)
 
 
 def fetch_category(category_id):

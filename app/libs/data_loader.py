@@ -1,13 +1,13 @@
 import app.libs.api as api
 from app.libs.redis_cache import RedisCache, RedisCacheException
-from app.models import Category, CategoryList
+from app.models import Category, AllCategories
 
 
 CATEGORY_KEYS = ['obj_id', 'title']
-CATEGORY_LIST_KEYS = ['category_ids']
+ALL_CATEGORIES_KEYS = ['category_ids']
 
 CATEGORY_PREFIX = 'Category'
-CATEGORIES_PREFIX = 'Categories'
+ALL_CATEGORIES_PREFIX = 'AllCategories'
 
 
 def object_to_dict(obj, keys):
@@ -34,24 +34,23 @@ class DataLoader:
         category_dict = self.cache.load(cache_key(CATEGORY_PREFIX, obj_id))
         return Category(**category_dict)
 
-    def _store_category_list_to_cache(self, categories: CategoryList):
-        categories_dict = object_to_dict(categories, CATEGORY_LIST_KEYS)
-        self.cache.store(CATEGORIES_PREFIX, categories_dict)
-        for category in categories.categories:
+    def _store_all_categories_to_cache(self, all_categories: AllCategories):
+        all_categories_dict = object_to_dict(all_categories, ALL_CATEGORIES_KEYS)
+        self.cache.store(ALL_CATEGORIES_PREFIX, all_categories_dict)
+        for category in all_categories.categories:
             self._store_category_to_cache(category)
 
-    def _fetch_category_list_from_cache(self) -> CategoryList:
-        categories_list = []
-        categories_dict = self.cache.load(CATEGORIES_PREFIX)
-        for category_id in categories_dict['category_ids']:
-            categories_list.append(self._fetch_category_from_cache(category_id))
-        del categories_dict['category_ids']
-        return CategoryList(categories_list)
+    def _fetch_all_categories_from_cache(self) -> AllCategories:
+        categories = []
+        all_categories_dict = self.cache.load(ALL_CATEGORIES_PREFIX)
+        for category_id in all_categories_dict['category_ids']:
+            categories.append(self._fetch_category_from_cache(category_id))
+        return AllCategories(categories)
 
-    def load_category_list(self) -> CategoryList:
+    def load_category_list(self) -> AllCategories:
         try:
-            return self._fetch_category_list_from_cache()
+            return self._fetch_all_categories_from_cache()
         except RedisCacheException:
-            categories = api.fetch_category_list()
-            self._store_category_list_to_cache(categories)
-            return categories
+            all_categories = api.fetch_all_categories()
+            self._store_all_categories_to_cache(all_categories)
+            return all_categories
