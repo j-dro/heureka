@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 import app.libs.api as api
-import app.libs.redis_cache as redis_cache
-from app.models import Pagination, Categories
+from app.models import Pagination
+from app.libs.data_loader import DataLoader
 
 app = Flask(__name__)
 
@@ -12,19 +12,12 @@ PRODUCT_SHORT_DESCRIPTION_LENGTH = 500
 
 @app.route('/')
 def homepage():
-    cache = redis_cache.RedisCache()
-
-    try:
-        all_categories = Categories.from_cache(cache, '')
-    except redis_cache.RedisCacheException:
-        all_categories = api.fetch_all_categories()
-        all_categories.save_to_cache(cache)
-
     page_number = request.args.get('page', default=1, type=int)
-
     offset = (page_number - 1) * CATEGORY_PER_HOMEPAGE
     limit = CATEGORY_PER_HOMEPAGE
 
+    loader = DataLoader()
+    all_categories = loader.load_all_categories()
     categories = all_categories.categories[offset:offset + limit + 1]
 
     pagination = Pagination(len(categories), CATEGORY_PER_HOMEPAGE, page_number)

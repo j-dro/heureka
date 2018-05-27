@@ -1,70 +1,26 @@
-import json
 from math import inf, ceil
-from app.libs.redis_cache import RedisCache
 
 NO_PICTURE_TEXT = 'Žadný obrázek'
-
 PAGES_COUNT_IN_PAGINATION = 10
 
 
-class Cachable:
-    TO_CACHE = ['obj_id']
-
-    def __init__(self, obj_id):
-        self.obj_id = obj_id
-
-    @property
-    def json(self):
-        dictionary = {}
-        for key in self.TO_CACHE:
-            dictionary[key] = getattr(self, key)
-
-        return json.dumps(dictionary)
-
-    def save_to_cache(self, cache: RedisCache):
-        key = '%s%s' % (self.__class__.__name__, self.obj_id)
-        cache.setex(key, self.json)
-
-    @classmethod
-    def dict_from_cache(cls, cache: RedisCache, obj_id):
-        key = '%s%s' % (cls.__name__, obj_id)
-        json_data = cache.get(key)
-        return json.loads(json_data)
-
-    @classmethod
-    def from_cache(cls, cache: RedisCache, obj_id):
-        return cls(**cls.dict_from_cache(cache, obj_id))
-
-
-class Category(Cachable):
+class Category:
+    CACHE_KEY = 'Category'
     TO_CACHE = ['obj_id', 'title']
 
     def __init__(self, obj_id, title):
-        super().__init__(obj_id)
+        self.obj_id = obj_id
         self.title = title
 
 
-class Categories(Cachable):
+class Categories:
+    CACHE_KEY = 'Categories'
     TO_CACHE = ['obj_id', 'category_ids']
 
     def __init__(self, obj_id, categories):
-        super().__init__(obj_id)
+        self.obj_id = obj_id
         self.categories = categories
         self.category_ids = [category.obj_id for category in categories]
-
-    def save_to_cache(self, cache: RedisCache):
-        super().save_to_cache(cache)
-        for category in self.categories:
-            category.save_to_cache(cache)
-
-    @classmethod
-    def from_cache(cls, cache: RedisCache, obj_id):
-        dictionary = cls.dict_from_cache(cache, obj_id)
-        dictionary['categories'] = []
-        for category_id in dictionary['category_ids']:
-            dictionary['categories'].append(Category.from_cache(cache, category_id))
-        del dictionary['category_ids']
-        return cls(**dictionary)
 
 
 class Offer:

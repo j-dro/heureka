@@ -1,3 +1,4 @@
+import json
 import redis
 
 
@@ -20,12 +21,19 @@ class RedisCache:
     def __init__(self):
         self.redis = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
-    def get(self, key) -> str:
+    def _get(self, key) -> str:
         data = self.redis.get(key)
         if not data:
             raise RedisCacheKeyError('Key %s not found in cache' % key)
 
         return data.decode('utf-8')
 
-    def setex(self, key, value):
+    def _setex(self, key, value):
         self.redis.setex(key, CACHE_TIMEOUT_SEC, value)
+
+    def store(self, key, data):
+        self._setex(key, json.dumps(data))
+
+    def load(self, key):
+        json_data = self._get(key)
+        return json.loads(json_data)
