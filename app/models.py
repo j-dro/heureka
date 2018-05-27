@@ -5,8 +5,6 @@ PAGES_COUNT_IN_PAGINATION = 10
 
 
 class Category:
-    CACHE_KEY = 'Category'
-    TO_CACHE = ['obj_id', 'title']
 
     def __init__(self, obj_id, title):
         self.obj_id = obj_id
@@ -14,8 +12,6 @@ class Category:
 
 
 class Categories:
-    CACHE_KEY = 'Categories'
-    TO_CACHE = ['obj_id', 'category_ids']
 
     def __init__(self, obj_id, categories):
         self.obj_id = obj_id
