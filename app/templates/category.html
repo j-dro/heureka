@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Produkty v sekci {{ category.title }} </title>
+</head>
+<body>
+{% for product in products %}
+    <p>
+        <img src="{{ product.image_urls[0] }}" style="width:100px;height:100px;"/> <br>
+        <a href="/products/{{ product.id }}">{{ product.title }}</a> <br>
+        {{ product.description }} <br>
+        {{ "%.f"|format(product.min_price) }} - {{ "%.f"|format(product.max_price) }} Kč
+        <a href="/products/{{ product.id }}">Porovnat ceny</a>
+    </p>
+{% endfor %}
+
+{% include 'pagination.html' %}
+
+</body>
+</html>

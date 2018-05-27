@@ -1,0 +1,17 @@
+{% if pagination.prev_page %}
+    <a href="?page={{ pagination.prev_page }}">Předchozí</a>&nbsp;
+{% endif %}
+
+{% for page in pagination.available_pages %}
+    {% if page == pagination.current_page %}
+    <b>
+    {% endif %}
+        <a href="?page={{ page }}">{{ page }}</a>&nbsp;
+    {% if page == pagination.current_page %}
+    </b>
+    {% endif %}
+{% endfor %}
+
+{% if pagination.next_page %}
+    <a href="?page={{ pagination.next_page }}">Další</a>&nbsp;
+{% endif %}

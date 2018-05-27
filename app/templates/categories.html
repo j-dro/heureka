@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kategorie</title>
+</head>
+<body>
+{% for category in categories %}
+  <a href="/categories/{{ category.obj_id }}?page=1">{{ category.title }}</a> <br>
+{% endfor %}
+
+{% include 'pagination.html' %}
+
+</body>
+</html>
