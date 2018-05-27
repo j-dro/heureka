@@ -11,10 +11,9 @@ class Category:
         self.title = title
 
 
-class Categories:
+class CategoryList:
 
-    def __init__(self, obj_id, categories):
-        self.obj_id = obj_id
+    def __init__(self, categories):
         self.categories = categories
         self.category_ids = [category.obj_id for category in categories]
 

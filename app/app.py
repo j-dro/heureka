@@ -17,7 +17,7 @@ def homepage():
     limit = CATEGORY_PER_HOMEPAGE
 
     loader = DataLoader()
-    all_categories = loader.load_all_categories()
+    all_categories = loader.load_category_list()
     categories = all_categories.categories[offset:offset + limit + 1]
 
     pagination = Pagination(len(categories), CATEGORY_PER_HOMEPAGE, page_number)
