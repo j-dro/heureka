@@ -1,31 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Detail produktu - {{ product.title }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Detail produktu - {{ product.title }}{% endblock %}
+{% block scripts %}
+<script language="javascript">
+    function show_specification() {
+        obj = $('.nav-tabs a[href="#specification"]');
+        obj.tab('show');
+        obj[0].scrollIntoView(true);
+    }
+</script>
+{% endblock %}
+{% block body %}
+<div class="container p-3">
+    <div class="row p-3">
+        <div class="col-4">
+            <div class="row p-3">
+                <div class="col border">
+                    {% if product.image_urls %}
+                    <img class="img-fluid mx-auto d-block" src="{{ product.image_urls[0] }}" style="width:300px;" data-qa="product-main-image"/>
+                    {% else %}
+                    <img class="img-fluid mx-auto d-block" src="http://via.placeholder.com/300x300?text=Žádný obrázek" data-qa="product-main-image"/>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row p-3 m-0">
 
-<img src="{{ product.image_urls[0] }}" style="width:300px;height:300px;"/> <br/>
-{% for url in product.image_urls[1:4] %}
-    <img src="{{ url }}" style="width:100px;height:100px;"/>
-{% endfor %}
- <br/>
+                {% for url in product.image_urls[1:4] %}
+                <div class="col m-1 border align-self-center p-0 m-0"><img class="img-fluid" src="{{ url }}"
+                                                                           style="width:100px;" data-qa="product-small-image"/></div>
+                {% endfor %}
 
-<h1>{{ product.title }}</h1>
+            </div>
+            {% if product.image_urls %}
+            <div class="row p-3">
+                <div class="col text-center">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gallery" data-qa="gallery-button">
+                        Galerie
+                    </button>
+                </div>
+            </div>
+            {% endif %}
 
-<p>
-    <a href="/categories/{{ category.obj_id }}">{{ category.title }}</a> >> {{ product.title }}
-</p>
-<p>
-    {{ product.description[:product_short_description_length] }}... <a href="?section=specification">Celá specifikace</a>
-</p>
+            {% include 'include/product_gallery.html' %}
 
-{% if section == 'compare' %}
-    {% include 'product_comparison.html' %}
-{% else %}
-    {% include 'product_specification.html' %}
-{% endif %}
+        </div>
+        <div class="col">
+            <h1 data-qa="product-title">{{ product.title }}</h1>
 
-</body>
-</html>
+            <p data-qa="product-navigation">
+                <a href="/categories/{{ category.obj_id }}">{{ category.title }}</a> >> {{ product.title }}
+            </p>
+            <p data-qa="product-short-description">
+                {{ product.description[:product_short_description_length] }}... <span class="text-primary"
+                                                                                      onclick="show_specification();"
+                                                                                      style="cursor: pointer;">Celá specifikace</span>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+
+            <!-- Navigation tabs -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#comparison" role="tab"
+                       data-qa="product-comparison-tab">Porovnání cen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#specification" role="tab"
+                       data-qa="product-spec-tab">Specifikace</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="comparison" role="tabpanel" data-qa="product-comparison">
+                    {% include 'include/product_comparison.html' %}
+                </div>
+                <div class="tab-pane" id="specification" role="tabpanel" data-qa="product-specification">
+                    {% include 'include/product_specification.html' %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

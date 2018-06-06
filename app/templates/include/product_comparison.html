@@ -1,0 +1,52 @@
+<script language="JavaScript">
+    function showRemainingOffers() {
+    const offersDiv = document.getElementById("remainingOffers");
+    if (offersDiv.style.display === "none") {
+        offersDiv.style.display = "block";
+        const offersButton = document.getElementById("offersButton");
+        offersButton.style.display = "none";
+    }
+}
+</script>
+
+<div class="container p-4">
+    <div class="row p-2">
+        <div class="col">
+            <h2>Porovnání cen</h2>
+        </div>
+    </div>
+
+    {% macro shop_row(shop_name, url, price) %}
+    <div class="row p-2" data-qa="product-offer">
+        <div class="col-7"><span class="lead" data-qa="shop-name">{{ shop_name }}</span></div>
+        <div class="col text-center"><a class="btn btn-primary custom-btn" href="{{ url }}" data-qa="product-buy-button">Koupit</a></div>
+        <div class="col text-center lead font-weight-bold"><span data-qa="product-price">{{ "%.f"|format(price) }}</span>
+            <span>Kč</span></div>
+    </div>
+    {% endmacro %}
+
+    {% for offer in product.sorted_offers[:3] %}
+    {{ shop_row(offer.shop_name, offer.url, offer.price) }}
+    {% endfor %}
+
+
+    <div id="offersButton" class="row p-2">
+        <div class="col text-center">
+            <button class="btn btn-primary" onclick="showRemainingOffers();" data-qa="button-show-remaining">Zobrazit další nabídky</button>
+        </div>
+    </div>
+</div>
+<div id="remainingOffers" style="display: none;">
+    <div class="container p-4">
+        <div class="row p-2">
+            <div class="col">
+
+                <h3>Ostatní nabídky</h3>
+            </div>
+        </div>
+
+        {% for offer in product.sorted_offers[3:] %}
+        {{ shop_row(offer.shop_name, offer.url, offer.price) }}
+        {% endfor %}
+    </div>
+</div>

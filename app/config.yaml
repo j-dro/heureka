@@ -1,0 +1,2 @@
+api_url: http://python-servers-vtnovk529892.codeanyapp.com:5000
+redis_url: $REDIS_URL

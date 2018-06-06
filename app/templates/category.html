@@ -1,21 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Produkty v sekci {{ category.title }} </title>
-</head>
-<body>
-{% for product in products %}
-    <p>
-        <img src="{{ product.image_urls[0] }}" style="width:100px;height:100px;"/> <br>
-        <a href="/products/{{ product.id }}">{{ product.title }}</a> <br>
-        {{ product.description }} <br>
-        {{ "%.f"|format(product.min_price) }} - {{ "%.f"|format(product.max_price) }} Kč
-        <a href="/products/{{ product.id }}">Porovnat ceny</a>
-    </p>
-{% endfor %}
+{% extends 'base.html' %}
+{% block title %}Produkty v sekci {{ category.title }}{% endblock %}
+{% block body %}
+<div class="container p-3">
+    <div class="row">
+        {% include 'include/categories_menu.html' %}
+        <div class="col-9">
+            {% for product in products %}
+            <div class="row" data-qa="product {{ product.title }}">
+                <div class="col">
+                    <div class="row border center-block text-center m-3 p-3">
+                        <div class="col-4 align-self-center">
+                            {% if product.image_urls %}
+                            <img class="img-fluid img-thumbnail" src="{{ product.image_urls[0] }}" data-qa="product-image"/>
+                            {% else %}
+                            <img class="img-fluid img-thumbnail"
+                                 src="http://via.placeholder.com/200x200?text=Žádný obrázek" data-qa="product-image"/>
+                            {% endif %}
+                        </div>
+                        <div class="col align-self-center">
+                            <a class="lead" href="/products/{{ product.id }}" data-qa="product-title">{{ product.title }}</a>
+                            <p data-qa="product-short-description">
+                                {{ product.description[:product_short_description_length] }}...
+                            </p>
+                        </div>
+                        <div class="col-3 align-self-center">
+                            <p class="lead">
+                                <span data-qa="product-min-price">{{ "%.f"|format(product.min_price) }}</span>
+                                <span> - </span>
+                                <span data-qa="product-max-price">{{ "%.f"|format(product.max_price) }}</span>
+                                <span>Kč</span>
+                            </p>
+                            <a class="btn btn-primary" href="/products/{{ product.id }}" data-qa="product-compare">Porovnat ceny</a>
+                        </div>
 
-{% include 'pagination.html' %}
-
-</body>
-</html>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% include 'include/pagination.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+# For running app on localhost, use:
+# app_url: localhost:5000
+# For runnin app on Heroku, use
+# app_url: https://<project-name>.herokuapp.com
+app_url: https://heureka-janjad.herokuapp.com
+
+# For automating browser using Browserstack, use
+# remote_driver_url: http://<user>:<access_key>@hub.browserstack.com:80/wd/hub
+# For using local selenium use
+# remote_driver_url: http://localhost:4444/wd/hub
+remote_driver_url: http://localhost:4444/wd/hub
+
+log_level: info

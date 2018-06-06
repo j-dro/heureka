@@ -1,0 +1,51 @@
+<div class="modal" id="gallery" data-qa="gallery-modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Galerie</h4>
+                <button type="button" class="close" data-dismiss="modal" data-qa="gallery-button-close">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+
+                <div id="demo" class="carousel slide" data-ride="carousel" data-interval="false">
+
+                    <!-- Pictures -->
+                    <div class="carousel-inner" style="height:400px">
+                        <div class="carousel-item active">
+                            <img class="img-responsive mx-auto d-block" src="{{ product.image_urls[0] }}"
+                                 style="max-width:400px;max-height:400px" data-qa="gallery-image">
+                        </div>
+                        {% for url in product.image_urls[1:] %}
+                        <div class="carousel-item">
+                            <img class="img-responsive mx-auto d-block" src="{{ url }}"
+                                 style="max-width:400px;max-height:400px" data-qa="gallery-image">
+                        </div>
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+
+                {% if product.image_urls|length > 1 %}
+                <!-- Prev and Next controls -->
+                <div class="p-3">
+                    <a class="btn btn-primary float-left" href="#demo" data-slide="prev" data-qa="gallery-prev-image">
+                        <span>Předchozí</span>
+                    </a>
+                    <a class="btn btn-primary float-right" href="#demo" data-slide="next" data-qa="gallery-next-image">
+                        <span>Následující</span>
+                    </a>
+                </div>
+                {% endif %}
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

@@ -1,15 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Kategorie</title>
-</head>
-<body>
-{% for category in categories %}
-  <a href="/categories/{{ category.obj_id }}?page=1">{{ category.title }}</a> <br>
-{% endfor %}
+{% extends 'base.html' %}
+{% block title %}Kategorie{% endblock %}
+{% block body %}
+<div class="container mt-3">
+    <div class="row">
+        {% include 'include/categories_menu.html' %}
+        <div class="col-9">
+            <div class="row pl-3">
+                {% for category in categories %}
+                <div class="col border m-3 p-3 text-center">
+                    <a href="/categories/{{ category.obj_id }}?page=1">
+                        <img class="mx-auto" src="/static/images/category{{ category.obj_id }}.jpg"
+                             style="display: block"/><br>
+                        <span data-qa="categories-grid-item-title">{{ category.title }}</span>
+                    </a>
+                </div>
+                {% if loop.index is divisibleby 3 and not loop.last %}
+            </div>
+            <div class="row pl-3">
+                {% endif %}
+                {% endfor %}
+            </div>
 
-{% include 'pagination.html' %}
+            {% include 'include/pagination.html' %}
 
-</body>
-</html>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

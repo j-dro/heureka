@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<div class="container mt-5 text-center">
+    <div class="jumbotron">
+        <h1 class="display-4" data-qa="title">{{ title }}</h1>
+        <p class="lead" data-qa="text">{{ text }}</p>
+        <hr class="my-4">
+        <p data-qa="suggestion">{{ suggestion }}</p>
+        <a class="btn btn-primary btn-lg" href="{{ url }}" role="button" data-qa="button">{{ button_text }}</a>
+    </div>
+</div>
+{% endblock %}

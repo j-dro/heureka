@@ -1,0 +1,22 @@
+{% if category is defined %}
+{% set current_category_id = category.obj_id %}
+{% else %}
+{% set current_category_id = 0 %}
+{% endif %}
+
+<div class="col-3 border mt-3">
+    {% for category in all_categories.categories %}
+    {% if current_category_id == category.obj_id %}
+    {% set link_class="lead font-weight-bold" %}
+    {% else %}
+    {% set link_class="lead" %}
+    {% endif %}
+    <div class="row p-3">
+        <div class="col">
+            <a class="{{ link_class }}"
+               href="/categories/{{ category.obj_id }}?page=1"
+               data-qa="categories-menu-item-title">{{ category.title }}</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
