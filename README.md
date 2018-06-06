@@ -121,12 +121,20 @@ It is also possible to override this file's configuration by
 adding `app/config.local.yaml` file - this one takes precedence before the former one.
 
 The file must contain following two configuration keys:
+* `api_url` - where the API which provides data for the app is running
+* `redis_url` - where redis is running - this value is preset for Heroku deployment
 ```
 api_url: http://python-servers-vtnovk529892.codeanyapp.com:5000
 redis_url: $REDIS_URL
 ```
 If syntax `$VAR_NAME` is used for the value,
 it means the value is expected to be in enviromental variable `VAR_NAME`.
+
+In case you want to run the application locally and don't want to export the REDIS_URL variable,
+change the `redis_url` key value like this:
+```
+redis_url: http://localhost:6379
+```
 
 ### Running the app Locally
 For running the app locally, namely for development purposes, simply run:

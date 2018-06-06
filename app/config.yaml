@@ -1,2 +1,7 @@
 api_url: http://python-servers-vtnovk529892.codeanyapp.com:5000
+
+# For running in Heroku use:
+# redis_url: $REDIS_URL
+# For running locally on default redis port use
+# redis_url: http://localhost:6379
 redis_url: $REDIS_URL
